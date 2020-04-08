@@ -1,8 +1,5 @@
 import numpy as np
 import random
-import TP1ej5TempleSimulado
-
-
 
 class Nodo():
     def __init__(self, padre= None, posicion=None):
@@ -11,6 +8,7 @@ class Nodo():
         self.gn=0
         self.hn=0
         self.fn=0
+
 
 class Aestrella():
     def __init__(self, almacen, inicio, fin):
@@ -78,8 +76,8 @@ class Aestrella():
                             hijos[i].padre=listaAbierta[j].padre
 
             listaAbierta.pop(0)
-            if len(hijos)>1:
-                hijos.pop(0)                                    #Problema de un solo hijo
+            #if len(hijos)>1:
+            #    hijos.pop(0)                                    #Problema de un solo hijo
             hijos.sort(key=lambda nodoAdyacente: nodoAdyacente.fn)
             listaAbierta.sort(key=lambda nodoAdyacente: nodoAdyacente.fn)
             
@@ -123,7 +121,7 @@ def tuplaAleatoria(N, cantComponentes):
 
 if __name__ == '__main__':
     N=5
-    print(TP1ej5TempleSimulado.generar_almacen(3,2))
+    #print(TP1ej5TempleSimulado.generar_almacen(3,2))
     almacen=np.zeros((N,N,N))
     inicio = print(tuplaAleatoria(N,3))
     fin = print(tuplaAleatoria(N, 3))
