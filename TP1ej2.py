@@ -76,10 +76,11 @@ class Aestrella():
                             hijos[i].padre=listaAbierta[j].padre
 
             listaAbierta.pop(0)
-            #if len(hijos)>1:
-            #    hijos.pop(0)                                    #Problema de un solo hijo
+            if len(hijos)>1:
+                hijos.pop(0)                                    #Problema de un solo hijo
             hijos.sort(key=lambda nodoAdyacente: nodoAdyacente.fn)
             listaAbierta.sort(key=lambda nodoAdyacente: nodoAdyacente.fn)
+            #it=it+1
             
         self.set_valor(False)
 
@@ -100,7 +101,7 @@ class Aestrella():
         return self.valor
 
 
-    def Distancia(slef, nodoActual,nodoAdyacente,n,m,o,i,j,l,fin):        #Ver el inicio y fin
+    def Distancia(self, nodoActual,nodoAdyacente,n,m,o,i,j,l,fin):        #Ver el inicio y fin
         if n + i == n or m + j == m or o +l == o:
             nodoAdyacente.gn=1+nodoActual.gn
         else:
@@ -118,15 +119,14 @@ def tuplaAleatoria(N, cantComponentes):
     return tuple(tuplaAleatoria)
 
 
-
 if __name__ == '__main__':
     N=5
     #print(TP1ej5TempleSimulado.generar_almacen(3,2))
     almacen=np.zeros((N,N,N))
-    inicio = print(tuplaAleatoria(N,3))
-    fin = print(tuplaAleatoria(N, 3))
+    inicio = print(tuplaAleatoria(N,3)) #6
+    fin = print(tuplaAleatoria(N, 3))   #6
 
-    porcentajeObstaculos=N*N*N*50/100
+    porcentajeObstaculos=N*N*N*10/100   #Hacer una funcion
     while porcentajeObstaculos>0:
         obsx = random.randrange(0, N)
         obsy = random.randrange(0, N)
