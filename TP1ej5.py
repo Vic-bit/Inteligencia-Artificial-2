@@ -14,7 +14,7 @@ if __name__ == '__main__':
     almacen=generar_almacen(3,2)
     print(almacen)
     lista_productos=seleccionar_producto_aleatorio(almacen,N)
-    print(lista_productos)
+    print("La lista final es: ", lista_productos)
     print(lista_coordenadas(almacen,lista_productos))
 
     Recocido_Simulado(almacen,lista_productos)

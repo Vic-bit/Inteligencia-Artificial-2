@@ -9,14 +9,14 @@ from Aestrella import Aestrella
 class Recocido_Simulado():
     def __init__(self, almacen, lista_productos):
         self.temperatura=100
-
+        
         nodo_actual=NodoRS(lista_productos)
 
 
         self.distancia_entre_productos(almacen, nodo_actual)
         print("La distancia incial es de: ", nodo_actual.dist)
 
-
+        print(lista_productos)
         it=0
         while it<1000:
             self.temperatura=self.temperatura*0.99  #0.9= constante de enfriamiento

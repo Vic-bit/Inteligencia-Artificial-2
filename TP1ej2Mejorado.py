@@ -3,20 +3,18 @@ import numpy as np
 from NodoA import NodoA
 
 class Aestrella():
-    def __init__(self, almacen, inicio, fin):
+    def __init__(self, espacioArticular, inicio, fin):
         raiz=NodoA(None, inicio)
         nodoobjetivo=NodoA(None, fin)    #Inicializo todo
         listaAbierta=[]
         listaCerrada=[]
         listaAbierta.append(raiz)
         hijos=[]
-        hijos.append(raiz)  #??
-        camino=[]
-        camino.append(raiz.posicion)
+        hijos.append(raiz)
         
         it=0
         nolistaCerrada=False
-        while(len(listaAbierta)>0):          #flag==False and it<100):
+        while(len(listaAbierta)>0):       
             if it==0:                           #Ver este if si está de más
                 nodoActual=listaAbierta[0]
             else:
@@ -24,23 +22,19 @@ class Aestrella():
                     nodoActual=hijos[1]
                 else:
                     nodoActual = hijos[0]
-                camino.append(nodoActual.posicion)
                 hijos.clear()
             listaCerrada.append(nodoActual)
 
             if nodoActual.posicion==nodoobjetivo.posicion:  #Condicion de salida
                 self.set_valor(True)
-                for p in range(0, len(self.get_camino(nodoActual))):  # Sin el -1 no me reconoce nada
+                for p in range(0, len(self.get_camino(nodoActual))): 
                     print(self.get_camino(nodoActual)[p].posicion)                   
                 self.set_dist(nodoActual.gn)
                 break
-            if it==0:
-                valor_fin=0
-            else:
-                valor_fin = almacen[nodoobjetivo.posicion]
-            n=nodoActual.posicion[0]
-            m=nodoActual.posicion[1]    #Recorro los nodos adyacentes, que no se salgan y no sean un muro
-            o=nodoActual.posicion[2]
+            
+            n1=nodoActual.posicion[0]
+            n2=nodoActual.posicion[1]
+            n3=nodoActual.posicion[2]
             n4=nodoActual.posicion[3]
             n5=nodoActual.posicion[4]
             n6=nodoActual.posicion[5]
@@ -50,23 +44,21 @@ class Aestrella():
                         for p in range(-1, 2):
                             for q in range(-1, 2):
                                 for r in range(-1, 2):
-                                    if n + i > -1 and m + j > -1 and o+l>-1 and n+i < almacen.shape[0] and m+j <almacen.shape[1] and o+l <almacen.shape[2] and n4 + p > -1 and n5 + q > -1 and n6+r>-1 and n4+p < almacen.shape[3] and n5+q <almacen.shape[4] and n6+r <almacen.shape[5]:
-                                        
-                                        #if n + i == n or m + j == m:
-                                        if almacen[n + i, m + j, o + l, n4+p,n5+q,n6+r] == 0 or almacen[n+i,m+j,o+l, n4+p,n5+q,n6+r]==valor_fin:
-                                            for k in range(0, len(listaCerrada)):               #Si están en la lista cerrada no los recorre
-                                                if (n+i,m+j,o+l, n4+p,n5+q,n6+r) == listaCerrada[k].posicion:
+                                    if n1 + i > -1 and n2 + j > -1 and n3+l>-1 and n1+i < espacioArticular.shape[0] and n2+j <espacioArticular.shape[1] and n3+l <espacioArticular.shape[2] and n4 + p > -1 and n5 + q > -1 and n6+r>-1 and n4+p < espacioArticular.shape[3] and n5+q <espacioArticular.shape[4] and n6+r <espacioArticular.shape[5]:
+                                        if espacioArticular[n1 + i, n2 + j, n3 + l, n4+p, n5+q, n6+r] == 0 or espacioArticular[n1+i, n2+j, n3+l, n4+p, n5+q, n6+r]== espacioArticular[nodoobjetivo.posicion]:
+                                            for k in range(0, len(listaCerrada)):            
+                                                if (n1+i, n2+j, n3+l, n4+p, n5+q, n6+r) == listaCerrada[k].posicion:
                                                     nolistaCerrada = False
                                                     break
                                                 else:
                                                     nolistaCerrada = True
                                             if nolistaCerrada==True:
-                                                nodoAdyacente = NodoA(nodoActual, (n + i, m + j, o+l, n4+p,n5+q,n6+r))
+                                                nodoAdyacente = NodoA(nodoActual, (n1+i, n2+j, n3+l, n4+p, n5+q, n6+r))
                                                 hijos.append(nodoAdyacente)
-                                                self.Distancia(nodoActual, nodoAdyacente, n, m, o, n4, n5, n6, i, j, l, p, q, r, fin)
+                                                self.distancia(nodoActual, nodoAdyacente, n1, n2, n3, n4, n5, n6, i, j, l, p, q, r, fin)
                                                 nolistaCerrada=False
                                                 for k in range(0, len(listaAbierta)):
-                                                    if (n+i,m+j,o+l, n4+p,n5+q,n6+r) == listaAbierta[k].posicion:
+                                                    if (n1+i, n2+j, n3+l, n4+p, n5+q, n6+r) == listaAbierta[k].posicion:
                                                         nolistaAbierta=False
                                                         break
                                                     else:
@@ -82,28 +74,27 @@ class Aestrella():
 
             listaAbierta.pop(0)
             #if len(hijos)>1:
-            #    hijos.pop(0)                                    #Problema de un solo hijo
+            #    hijos.pop(0)                              
             hijos.sort(key=lambda nodoAdyacente: nodoAdyacente.fn)
             listaAbierta.sort(key=lambda nodoAdyacente: nodoAdyacente.fn)
             it=it+1
 
 
     def get_camino(self, nodoActual):
-        path = []
+        camino = []
         while nodoActual is not None:
-            path.append(nodoActual)
+            camino.append(nodoActual)
             nodoActual = nodoActual.padre
-        return path
+        return camino
 
 
-    def Distancia(self, nodoActual,nodoAdyacente,n,m,o,n4,n5,n6,i,j,l,p,q,r,fin):        #Ver el inicio y fin
-        if n + i == n or m + j == m or o+l==o or n4+p==n4 or n5+q==n5 or n6+r==n6:
+    def distancia(self, nodoActual,nodoAdyacente,n1,n2,n3,n4,n5,n6,i,j,l,p,q,r,fin):        #Ver el inicio y fin
+        if n1 + i == n1 or n2 + j == n2 or n3+l==n3 or n4+p==n4 or n5+q==n5 or n6+r==n6:
             nodoAdyacente.gn=1+nodoActual.gn
         else:
             nodoAdyacente.gn=1.4+nodoActual.gn
-        nodoAdyacente.hn = abs(n + i - fin[0]) + abs(m + j - fin[1]) +abs(o+l-fin[2])+abs(n4 + p - fin[3]) + abs(n5 + q - fin[4]) +abs(n6+l-fin[5])
+        nodoAdyacente.hn = abs(n1+i-fin[0]) + abs(n2+j-fin[1]) + abs(n3+l-fin[2])+abs(n4+p-fin[3]) + abs(n5+q-fin[4]) + abs(n6+r-fin[5])
         nodoAdyacente.fn = nodoAdyacente.gn + nodoAdyacente.hn
-        return 1
 
 
     def set_valor(self, valor):
@@ -130,31 +121,33 @@ def tuplaAleatoria(N, cantComponentes):
     return tuple(tuplaAleatoria)
 
 
-
-
-if __name__ == '__main__':
-    N=10
-    almacen=np.zeros((N,N,N,N,N,N))
-    inicio = tuplaAleatoria(N,6) 
-    fin = tuplaAleatoria(N, 6)  
-
-    porcentajeObstaculos=N*N*N*50/100   #Hacer una funcion
-    while porcentajeObstaculos>0:
+def obstaculosAleatorios(porcentajeObstaculos):
+    cantidadObstaculos=N*N*N*N*N*N*porcentajeObstaculos/100
+    while cantidadObstaculos>0:
         obs1 = random.randrange(0, N)
         obs2 = random.randrange(0, N)
         obs3 = random.randrange(0, N)
         obs4 = random.randrange(0, N)
         obs5 = random.randrange(0, N)
         obs6 = random.randrange(0, N)
-        almacen[obs1,obs2,obs3,obs4,obs5,obs6]=1
-        porcentajeObstaculos=porcentajeObstaculos-1
-    #print(almacen)
+        if espacioArticular[obs1,obs2,obs3,obs4,obs5,obs6]==0:
+            espacioArticular[obs1,obs2,obs3,obs4,obs5,obs6]=1
+            cantidadObstaculos=cantidadObstaculos-1
+    return espacioArticular
 
-    busqueda=Aestrella(almacen,inicio,fin)
-    print(busqueda.get_valor())
+
+if __name__ == '__main__':
+    N=10
+    espacioArticular=np.zeros((N,N,N,N,N,N))
+    #inicio = tuplaAleatoria(N,6) 
+    #fin = tuplaAleatoria(N, 6)  
+    inicio=(1,0,9,7,4,2)
+    fin=(5,5,5,5,5,5)
+    porcentajeObstaculos=100
     
+    busqueda=Aestrella(obstaculosAleatorios(porcentajeObstaculos),inicio,fin) 
 
     if busqueda.get_valor()==True:
-        print("Ha llegado al objetivo!!!!!!!!!!!!!!!!!")
+        print("Ha llegado al objetivo")
     else:
         print("No lo ha conseguido")
