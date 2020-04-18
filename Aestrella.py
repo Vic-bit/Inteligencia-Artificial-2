@@ -12,10 +12,9 @@ class Aestrella():
         camino=[]
         camino.append(raiz.posicion)
 
-        flag=False
         it=0
         nolistaCerrada=False
-        while(len(listaAbierta)>0):          #flag==False and it<100):
+        while(len(listaAbierta)>0):        
             if it==0:                           #Ver este if si está de más
                 nodoActual=listaAbierta[0]
             else:
@@ -29,7 +28,6 @@ class Aestrella():
 
             if nodoActual.posicion==nodoobjetivo.posicion:  #Condicion de salida
                 self.set_valor(True)
-                flag=True
                 for i in range(0, len(self.get_camino(nodoActual))):
                     self.get_camino(nodoActual)[i].posicion #print
                 self.set_dist(nodoActual.gn)

@@ -12,11 +12,9 @@ class Recocido_Simulado():
         
         nodo_actual=NodoRS(lista_productos)
 
-
         self.distancia_entre_productos(almacen, nodo_actual)
         print("La distancia incial es de: ", nodo_actual.dist)
 
-        print(lista_productos)
         it=0
         while it<1000:
             self.temperatura=self.temperatura*0.99  #0.9= constante de enfriamiento
@@ -40,7 +38,7 @@ class Recocido_Simulado():
                     nodo_actual=nodo_siguiente
 
             it=it+1
-            #print("La distancia final es de: ", nodo_actual.dist)
+        print("La lista de productos ordenada es: ", nodo_actual.lista_productos)
         print("La distancia final es de: ", nodo_actual.dist)
 
 
