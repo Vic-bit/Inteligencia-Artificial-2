@@ -93,7 +93,6 @@ class Aestrellaaux():
             nodoAdyacente.gn=1.4+nodoActual.gn
         nodoAdyacente.hn = abs(n + i - fin[0]) + abs(m + j - fin[1])
         nodoAdyacente.fn = nodoAdyacente.gn + nodoAdyacente.hn
-        return 1
 
 
     def set_valor(self, valor):
