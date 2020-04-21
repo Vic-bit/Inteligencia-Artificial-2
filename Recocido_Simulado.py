@@ -4,12 +4,14 @@ from NodoRS import NodoRS
 from almacen import generar_almacen
 from almacen import seleccionar_producto_aleatorio
 from almacen import lista_coordenadas
-from Aestrella import Aestrella
+from A_estrella_ej3 import A_estrella_ej3
+
 
 class Recocido_Simulado():
-    def __init__(self, almacen, lista_productos):
-        self.temperatura=100
-        
+    def __init__(self, almacen, lista_productos, temperatura_inicial, temperatura_final,constante_enfriamiento):
+        self.temperatura=temperatura_inicial
+        self.temperatura_final=temperatura_final
+        self.constante_enfriamiento=constante_enfriamiento
         nodo_actual=NodoRS(lista_productos)
 
         self.distancia_entre_productos(almacen, nodo_actual)
@@ -17,14 +19,14 @@ class Recocido_Simulado():
 
         it=0
         while it<1000:
-            self.temperatura=self.temperatura*0.99  #0.9= constante de enfriamiento
+            self.decaimiento_temperatura() 
 
-            if self.temperatura<0.001: #Tf=10
-                #return nodo_actual
+            if self.temperatura<0.001:
                 break
 
             nodo_siguiente=NodoRS(lista_productos)
-            random.shuffle(nodo_siguiente.lista_productos)
+ 
+            self.vecino(nodo_siguiente)
 
             self.distancia_entre_productos(almacen, nodo_siguiente)
 
@@ -42,26 +44,35 @@ class Recocido_Simulado():
         print("La distancia final es de: ", nodo_actual.dist)
 
 
+    def decaimiento_temperatura(self):
+        self.temperatura=self.temperatura*self.constante_enfriamiento
+
+
+    def vecino(self, nodo_siguiente):
+        flag=False
+        while flag==False:
+            r1 = random.randrange(0, len(nodo_siguiente.lista_productos))
+            r2 = random.randrange(0, len(nodo_siguiente.lista_productos))
+            if r1!=r2:
+                flag=True
+        a = nodo_siguiente.lista_productos[r1]
+        b = nodo_siguiente.lista_productos[r2] 
+        nodo_siguiente.lista_productos[r1]=b
+        nodo_siguiente.lista_productos[r2]=a
+
+
     def distancia_entre_productos(self, almacen, NodoRS):
         coordenadas = lista_coordenadas(almacen, NodoRS.lista_productos)
         for i in range(0, len(coordenadas)):
             if i == 0:  # Respecto a la bahía de carga
-                AE1 = Aestrella(almacen, (0, 0), coordenadas[i])
+                AE1 = A_estrella_ej3(almacen, (0, 0), coordenadas[i])
                 dm = AE1.get_dist()
             else:
-                AE2 = Aestrella(almacen, coordenadas[i-1], coordenadas[i])
+                AE2 = A_estrella_ej3(almacen, coordenadas[i-1], coordenadas[i])
                 dm = AE2.get_dist()
             NodoRS.dist = NodoRS.dist + dm
         return NodoRS.dist
-    """def distancia_manhattan(self, NodoRS):
-        coordenadas=lista_coordenadas(almacen, NodoRS.lista_productos)
-        for i in range(0, len(coordenadas)):
-            if i==0:                                #Respecto a la bahía de carga
-                dist1=Aestrella(alamacen, (0,0), lista_coordenadas(alamacen,lista_productos)[0])
-                print(dist1.get_dist())
-                dm = abs(0 - coordenadas[i][0]) + abs(0 - coordenadas[i][1])
-            else:
-                dm = abs(coordenadas[i-1][0] - coordenadas[i][0]) + abs(coordenadas[i-1][1] - coordenadas[i][1])
-            NodoRS.dist = NodoRS.dist + dm
-        return NodoRS.dist
-     """
+
+
+
+

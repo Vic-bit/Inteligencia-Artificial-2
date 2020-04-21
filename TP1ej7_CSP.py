@@ -82,7 +82,6 @@ class Backtraking():
         if tiempo>=restricciones_maquinas[var].tiempo:
             restricciones_maquinas[var].desocupada=True
 
-
         if var not in restricciones_maquinas[var].tareas.keys() and restricciones_maquinas[var].desocupada==True:
             restricciones_maquinas[var].tareas[var]=tiempo
             restricciones_maquinas[var].tiempo=tareas[var]+tiempo
@@ -123,4 +122,3 @@ if __name__ == '__main__':
     print("---------------------------------------------------------")
 
     res=Backtraking(tareas, dominio, restricciones_precedencia, restricciones_maquinas, maquinas,0)
-
